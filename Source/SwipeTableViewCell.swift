@@ -26,6 +26,10 @@ open class SwipeTableViewCell: UITableViewCell {
     var actionsView: SwipeActionsView?
 
     var originalLayoutMargins: UIEdgeInsets = .zero
+	
+	open func actionsViewHeight() -> CGFloat? {
+		return nil
+	}
     
     lazy var panGestureRecognizer: UIPanGestureRecognizer = {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(gesture:)))
@@ -245,8 +249,11 @@ open class SwipeTableViewCell: UITableViewCell {
         actionsView.delegate = self
         
         addSubview(actionsView)
-
-        actionsView.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
+		if let height = actionsViewHeight() {
+			actionsView.heightAnchor.constraint(equalToConstant: height).isActive = true
+		} else {
+			actionsView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+		}
         actionsView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 2).isActive = true
         actionsView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         
